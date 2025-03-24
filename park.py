@@ -5,11 +5,14 @@ import numpy as np
 
 # Video feed
 video_path = r"C:\Users\eeshn\Desktop\carPark.mp4"
-cap = cv2.VideoCapture(video_path)  # Burada doğru yolu kullandığınızdan emin olun
+cap = cv2.VideoCapture(video_path)
 
 # Park yeri pozisyonlarının yüklendiği dosya
 with open('CarParkPos', 'rb') as f:
     posList = pickle.load(f)
+
+# Sıralama işlemi, burada 'posList' verisi yüklendikten sonra yapılmalı
+posList = sorted(posList, key=lambda pos: (pos[1], pos[0]))
 
 width, height = 107, 48  # Park yeri boyutları
 
@@ -59,10 +62,8 @@ while True:
     # Ekranda sonucu göster
     cv2.imshow("Image", img)
     
-    # 10ms bekleyip devam et
-    if cv2.waitKey(10) & 0xFF == ord('q'):  # 'q' tuşuna basıldığında çıkış yap
+    if cv2.waitKey(10) & 0xFF == ord('q'):  
         break
 
-# Video ve pencereyi kapat
 cap.release()
 cv2.destroyAllWindows()
